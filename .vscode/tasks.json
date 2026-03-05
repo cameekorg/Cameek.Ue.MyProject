@@ -1,0 +1,32 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "dotnet",
+            "task": "build",
+            "group": "build",
+            "problemMatcher": [],
+            "label": "build"
+        },
+        {
+            "label": "unblock-my-server-port",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-lc",
+                "port=${config:my.ports.server}; if command -v lsof >/dev/null 2>&1; then pids=$(lsof -ti tcp:$port 2>/dev/null || true); elif command -v fuser >/dev/null 2>&1; then pids=$(fuser -n tcp $port 2>/dev/null || true); else pids=; fi; if [ -n \"$pids\" ]; then echo \"Killing PID(s) $pids using port $port\"; kill -9 $pids 2>/dev/null || true; else echo \"Port $port is free\"; fi"
+            ],
+            "windows": {
+                "command": "powershell",
+                "args": [
+                    "-NoProfile",
+                    "-ExecutionPolicy",
+                    "Bypass",
+                    "-Command",
+                    "$port=${config:my.ports.server}; $conns = Get-NetTCPConnection -LocalPort $port -ErrorAction SilentlyContinue; if ($conns) { $pids = $conns | Select-Object -ExpandProperty OwningProcess -Unique; foreach ($pid in $pids) { try { $p = Get-Process -Id $pid -ErrorAction Stop; Write-Host \"Killing PID $pid ($($p.ProcessName)) using port $port\"; Stop-Process -Id $pid -Force; } catch { Write-Host \"Could not kill PID $pid\" } } } else { Write-Host \"Port $port is free\" }"
+                ]
+            },
+            "problemMatcher": []
+        }
+    ]
+}

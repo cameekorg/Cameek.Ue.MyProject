@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "name": "C#: My Server [http]",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/Cameek.Ue.MyProject.csproj",
+            "launchConfigurationId": "TargetFramework=;http",
+            "preLaunchTask": "unblock-my-server-port",
+            "postDebugTask": "unblock-my-server-port"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "My Server",
+            "configurations": [ "C#: My Server [http]" ],
+            "stopAll": true
+        }
+    ]    
+}
