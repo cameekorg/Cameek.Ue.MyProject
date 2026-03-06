@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Cameek.Primitivo" Version="0.0.9" />
+    <PackageReference Include="Cameek.Ue" Version="0.0.1" />
     <PackageReference Include="Cameek.W3CssJs.Bootstrap" Version="5.3.5" />
     <PackageReference Include="Cameek.W3CssJs.Gsap" Version="3.13.3" />
     <PackageReference Include="Cameek.W3CssJs.Mermaid" Version="11.6.4" />
