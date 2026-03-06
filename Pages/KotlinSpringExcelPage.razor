@@ -1,0 +1,284 @@
+@page "/kotlin-spring-excel"
+
+<PageTitle>Kotlin Spring Excel Report Generator</PageTitle>
+
+<H1>Kotlin Spring Excel Report Generator</H1>
+
+<BlockQuote>
+    <BlockQuoteContent>
+        This page documents a Kotlin-based Spring Boot 3 application that connects to an SQLite database,
+        fetches metric data, and generates an Excel file using a predefined template.
+        It serves as a template project for CLI-based data export utilities.
+    </BlockQuoteContent>
+    <BlockQuoteFooter>
+        The goal is to provide a reusable template project for generating Excel in Java/Kotlin.
+    </BlockQuoteFooter>
+</BlockQuote>
+
+<MermaidDiagram>
+    block-beta
+    columns 14
+    a1:2   space a2:2   space  a3:2   space   a4:2   space   a5:2
+    space:14
+    b1:2   space  b2:2   space  b3:2   space   space:3        b4:2
+
+    a1 --> a2
+    a2 --> a3
+    a3 --> a4
+    a4 --> a5
+
+    b1 --> a1
+    b2 --> a2
+    b3 --> a3
+    a5 --> b4
+
+    %% Labels
+    a1("Load Config")
+    a2("Import Excel")
+    a3("SQL Query")    
+    a4("Process Data")
+    a5("Store Excel")
+    b1("application.yaml")
+    b2("template.xlsx")
+    b3("Sqlite DB")
+    b4("output.xlsx")
+</MermaidDiagram>
+
+
+<H2>1. Features</H2>
+<ul>
+    <li>Connects to a local SQLite3 database using Spring JDBC</li>
+    <li>Reads a provided Excel template (.xlsx) using Apache POI</li>
+    <li>Injects rows into a specified worksheet using data from the database</li>
+    <li>Exports the result to a new Excel file</li>
+    <li>Configuration via <code>application.yml</code></li>
+</ul>
+
+
+<H2>2. Project Structure</H2>
+<p>
+    The application uses Kotlin + Spring Boot 3 and is organized into components for JDBC access,
+    Excel processing (via Apache POI), configuration, and CLI-style execution.
+</p>
+
+<CodeBlockSyntax Language="plaintext" EnableLineNumbers="false" EnableCopyButton="true"><pre>
+org.cameek.spring_excel/
+├── cli/
+│   └── ExcelRunner.kt       # ApplicationRunner that loads template & writes Excel output
+├── db/
+│   └── DataInitializer.kt   # Populates SQLite with test metric data
+├── resources/
+│   └── template.xlsx        # Excel template (formatted, can contain charts)
+│   └── application.yml      # Configuration for Sqlite3, paths and date ranges
+└── SpringExcelApplication.kt
+</pre></CodeBlockSyntax>
+
+
+<H2>3. Gradle Dependencies</H2>
+<p>
+    Below are necessary dependencies in <code>build.gradle.kts</code> used in the project:
+</p>
+
+<CodeBlockSyntax Language="kotlin" EnableLineNumbers="true" EnableCopyButton="true"><pre>
+plugins {
+    kotlin("jvm") version "1.9.25"
+    kotlin("plugin.spring") version "1.9.25"
+    id("org.springframework.boot") version "3.4.5"
+    id("io.spring.dependency-management") version "1.1.7"
+}
+
+group = "org.cameek"
+version = "0.0.1-SNAPSHOT"
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    //implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
+    implementation("org.xerial:sqlite-jdbc:3.45.3.0")
+    implementation("org.springframework.boot:spring-boot-starter-jdbc")
+    implementation("com.zaxxer:HikariCP:5.1.0")
+    implementation("org.apache.poi:poi-ooxml:5.2.5")
+
+    //implementation("org.springframework.boot:spring-boot-starter-cli")
+    
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.addAll("-Xjsr305=strict")
+    }
+}
+
+tasks.withType&lt;Test&gt; {
+    useJUnitPlatform()
+}
+</pre></CodeBlockSyntax>
+
+
+<H2>4. App Config Example in application.yml</H2>
+
+<ul>
+    <li>Configuration for SQLite3 JDBC driver, path to local DB, optionally username and password</li>
+    <li>Source Excel template path</li>
+    <li>Output Excel file path</li>
+    <li>SQL query date range</li>
+</ul>
+
+<CodeBlockSyntax Language="yaml" EnableLineNumbers="true" EnableCopyButton="true"><pre>
+spring:
+  application:
+    name: org.cameek.spring_excel
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+    url: jdbc:sqlite:metrics.db
+    username: 
+    password: 
+    
+excel:
+  template: src/main/resources/template.xlsx
+  output: report-output.xlsx
+
+report:
+  start-date: '2025-01-01'
+  end-date: '2025-12-31'
+</pre></CodeBlockSyntax>
+
+
+<H2>5. Fake Data for SQLite</H2>
+<p>
+    On startup, the app creates a simple <code>metrics</code> table and inserts 30 days of test data:
+</p>
+
+<CodeBlockSyntax Language="kotlin" EnableLineNumbers="true" EnableCopyButton="true"><pre>
+package org.cameek.spring_excel.db
+
+import jakarta.annotation.PostConstruct
+import org.springframework.jdbc.core.JdbcTemplate
+import org.springframework.stereotype.Component
+import java.time.LocalDate
+import kotlin.random.Random
+
+@@Component
+class DataInitializer(private val jdbcTemplate: JdbcTemplate) {
+
+    @@PostConstruct
+    fun initialize() {
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS metrics(date TEXT, metric REAL)")
+
+        jdbcTemplate.execute("DELETE FROM metrics")
+
+        val now = LocalDate.now()
+        for (i in 0..29) {
+            jdbcTemplate.update(
+                "INSERT INTO metrics(date, metric) VALUES (?,?)",
+                now.minusDays(i.toLong()).toString(),
+                Random.nextDouble(0.0, 100.0)
+            )
+        }
+    }
+}
+
+</pre></CodeBlockSyntax>
+
+
+<H2>6. Excel Template Example</H2>
+<p>
+    The <code>template.xlsx</code> file should include:
+</p>
+<ul>
+    <li>A sheet named <strong>Data</strong> or similar</li>
+    <li>Headers: <code>Date</code> and <code>Metric</code></li>
+    <li>Optional: Excel charts referencing the data range</li>
+</ul>
+
+
+<H2>7. Excel Report Generation</H2>
+<p>
+    The core logic loads the Excel template and fills it with database rows:
+</p>
+
+<CodeBlockSyntax Language="kotlin" EnableLineNumbers="true" EnableCopyButton="true"><pre>
+package org.cameek.spring_excel.cli
+
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.ApplicationArguments
+import org.springframework.boot.ApplicationRunner
+import org.springframework.jdbc.core.JdbcTemplate
+import org.springframework.stereotype.Component
+import java.io.File
+import java.io.FileOutputStream
+
+@@Component
+class ExcelRunner(
+    val jdbcTemplate: JdbcTemplate,
+    @@Value("\${excel.template}") val templatePath: String,
+    @@Value("\${excel.output}") val outputPath: String,
+    @@Value("\${report.start-date}") val startDate: String,
+    @@Value("\${report.end-date}") val endDate: String
+) : ApplicationRunner {
+    override fun run(args: ApplicationArguments?) {
+        val workbook = XSSFWorkbook(File(templatePath).inputStream())
+        val sheet = workbook.getSheetAt(0)
+
+        val data = jdbcTemplate.queryForList(
+            "SELECT date, metric FROM metrics WHERE date BETWEEN ? AND ?",
+            startDate, endDate
+        )
+
+        var rowIdx = 1
+        data.forEach {
+            val row = sheet.createRow(rowIdx++)
+            row.createCell(0).setCellValue(it["date"].toString())
+            row.createCell(1).setCellValue(it["metric"].toString().toDouble())
+        }
+
+        workbook.use {
+            FileOutputStream(outputPath).use { out -> workbook.write(out) }
+        }
+        println("Excel file generated: $outputPath")
+    }
+}
+</pre></CodeBlockSyntax>
+
+
+<H2>8. Running the Application</H2>
+<p>
+    Use Gradle to build and execute the application:
+</p>
+
+<CodeBlockSyntax Language="bash" EnableLineNumbers="false" EnableCopyButton="true"><pre>
+./gradlew bootRun
+</pre></CodeBlockSyntax>
+
+<p>
+    This will output the file specified in <code>application.yml</code>, such as:
+    <strong>report-output.xlsx</strong>
+</p>
+
+
+<H2>9. Repository and Further Usage</H2>
+<p>
+    The project is hosted at:
+    <a href="https://github.com/cameekorg/org.cameek.spring_excel" target="_blank">
+        github.com/cameekorg/org.cameek.spring_excel
+    </a>
+</p>
+<p>
+    You can clone it and adapt it as a base for CLI automation tools, batch report generators,
+    or backend schedulers for Excel generation.
+</p>

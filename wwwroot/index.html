@@ -7,10 +7,16 @@
     <title>Cameek.Ue.MyProject</title>
     <base href="/" />
     <link rel="preload" id="webassembly" />
-    <link href="_content/Microsoft.FluentUI.AspNetCore.Components/css/reboot.css" rel="stylesheet" />
+    <link rel="stylesheet" href="_content/Cameek.W3CssJs.Bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="_content/Microsoft.FluentUI.AspNetCore.Components/css/reboot.css" />
+    <link rel="stylesheet" href="_content/Cameek.W3CssJs.PrismJs/css/prism-tomorrow.min.css" />
+    <link rel="stylesheet" href="_content/Cameek.W3CssJs.PrismJs/css/prism-line-numbers.min.css" />
     <link rel="stylesheet" href="css/app.css" />
-    <link rel="icon" type="image/x-icon" href="favicon.ico" />
-    <link href="Cameek.Ue.MyProject.styles.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link rel="stylesheet" href="Cameek.Ue.MyProject.styles.css"  />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
+    <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
     <script type="importmap"></script>
 </head>
 
@@ -28,7 +34,59 @@
         <a href="." class="reload">Reload</a>
         <span class="dismiss">🗙</span>
     </div>
+    
+    <!-- Third-party libraries -->
+    <script src="_content/Cameek.W3CssJs.PrismJs/js/prism.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.PrismJs/js/prism-line-numbers.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.PrismJs/js/prism-bash.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.PrismJs/js/prism-batch.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.PrismJs/js/prism-c.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.PrismJs/js/prism-cpp.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.PrismJs/js/prism-csharp.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.PrismJs/js/prism-css.min.js"></script>
+    <!--<script src="_content/Cameek.W3CssJs.PrismJs/js/prism-html.min.js"></script>-->
+    <script src="_content/Cameek.W3CssJs.PrismJs/js/prism-java.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.PrismJs/js/prism-javascript.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.PrismJs/js/prism-json.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.PrismJs/js/prism-kotlin.min.js"></script>
+    <!--<script src="_content/Cameek.W3CssJs.PrismJs/js/prism-php.min.js"></script>-->
+    <script src="_content/Cameek.W3CssJs.PrismJs/js/prism-powershell.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.PrismJs/js/prism-properties.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.PrismJs/js/prism-python.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.PrismJs/js/prism-ruby.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.PrismJs/js/prism-shell-session.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.PrismJs/js/prism-sql.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.PrismJs/js/prism-xml-doc.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.PrismJs/js/prism-yaml.min.js"></script>
+
+    <script src="_content/Cameek.W3CssJs.Gsap/js/gsap.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.Gsap/js/Draggable.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.Gsap/js/DrawSVGPlugin.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.Gsap/js/EaselPlugin.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.Gsap/js/Flip.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.Gsap/js/GSDevTools.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.Gsap/js/InertiaPlugin.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.Gsap/js/MotionPathHelper.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.Gsap/js/MotionPathPlugin.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.Gsap/js/MorphSVGPlugin.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.Gsap/js/Observer.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.Gsap/js/Physics2DPlugin.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.Gsap/js/PhysicsPropsPlugin.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.Gsap/js/PixiPlugin.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.Gsap/js/ScrambleTextPlugin.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.Gsap/js/ScrollTrigger.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.Gsap/js/ScrollSmoother.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.Gsap/js/ScrollToPlugin.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.Gsap/js/SplitText.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.Gsap/js/TextPlugin.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.Gsap/js/EasePack.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.Gsap/js/CustomEase.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.Gsap/js/CustomBounce.min.js"></script>
+    <script src="_content/Cameek.W3CssJs.Gsap/js/CustomWiggle.min.js"></script>
+    
     <script src="_framework/blazor.webassembly#[.{fingerprint}].js"></script>
+    <script>navigator.serviceWorker.register('service-worker.js', { updateViaCache: 'none' });</script>
+
 </body>
 
 </html>

@@ -1,0 +1,101 @@
+﻿@page "/java-keytool"
+
+<PageTitle>Java Keytool</PageTitle>
+
+<H1>Java Keytool</H1>
+
+<BlockQuote>
+    <BlockQuoteContent>
+        This page provides concise commands for listing keystore contents, checking certificate details,
+        and importing certificates (both public and private keys) using the Java keytool utility.
+    </BlockQuoteContent>
+    <BlockQuoteFooter>
+        Useful for managing Java Keystores (JKS) for applications, servers, and secure communication.
+    </BlockQuoteFooter>
+</BlockQuote>
+
+<H2>1. Listing Keystore Contents</H2>
+<p>
+    Display all entries in a keystore (aliases, certificates, etc.):
+</p>
+
+<CodeBlockSyntax Language="bash" EnableLineNumbers="false" EnableCopyButton="true"><pre>
+keytool -list -v -keystore keystore.jks
+</pre></CodeBlockSyntax>
+
+<p>
+    - <strong>-list</strong> shows the contents of the keystore.<br />
+    - <strong>-v</strong> (verbose) displays detailed information about each entry.<br />
+    - <strong>-keystore</strong> specifies the keystore file.
+</p>
+
+<H2>2. Checking Certificate Details</H2>
+<p>
+    View detailed information about a specific certificate in the keystore:
+</p>
+
+<CodeBlockSyntax Language="bash" EnableLineNumbers="false" EnableCopyButton="true"><pre>
+keytool -list -v -keystore keystore.jks -alias mycert
+</pre></CodeBlockSyntax>
+
+<p>
+    - <strong>-alias mycert</strong> identifies the specific certificate entry to inspect.
+</p>
+
+<H2>3. Importing a Public Certificate (PEM or CRT)</H2>
+<p>
+    Import a public certificate (.pem, .crt) into a keystore:
+</p>
+
+<CodeBlockSyntax Language="bash" EnableLineNumbers="false" EnableCopyButton="true"><pre>
+keytool -import \
+    -alias mycert \
+    -file certificate.crt \
+    -keystore keystore.jks
+</pre></CodeBlockSyntax>
+
+<p>
+    - <strong>-file certificate.crt</strong> indicates the certificate file to be imported.<br />
+    - If the alias already exists, keytool prompts you to overwrite it (unless you use <strong>-trustcacerts</strong> 
+      to import into the trust store).
+</p>
+
+<H2>4. Importing a Certificate with Private Key (PEM or CRT)</H2>
+<p>
+    Java keytool cannot directly import a private key from PEM/CRT. Instead, you can convert it to a PKCS#12 file 
+    (with both certificate and private key included), then import that into a JKS.
+</p>
+
+<p><strong>Step A: Convert PEM/CRT + private key to PKCS#12</strong></p>
+<CodeBlockSyntax Language="bash" EnableLineNumbers="false" EnableCopyButton="true"><pre>
+openssl pkcs12 -export \
+    -in certificate.crt \
+    -inkey private.key \
+    -out mycert.p12 \
+    -name myalias
+</pre></CodeBlockSyntax>
+
+<p>
+    - <strong>myalias</strong> is an identifier you assign to the certificate+key pair in the PKCS#12 file.
+</p>
+
+<p><strong>Step B: Import the PKCS#12 file into a JKS keystore</strong></p>
+<CodeBlockSyntax Language="bash" EnableLineNumbers="false" EnableCopyButton="true"><pre>
+keytool -importkeystore \
+    -destkeystore keystore.jks \
+    -srckeystore mycert.p12 \
+    -srcstoretype pkcs12 \
+    -alias myalias
+</pre></CodeBlockSyntax>
+
+<p>
+    - <strong>-destkeystore keystore.jks</strong> is the target Java Keystore (JKS).<br />
+    - <strong>-srckeystore mycert.p12</strong> is the PKCS#12 file containing the private key and certificate.<br />
+    - <strong>-srcstoretype pkcs12</strong> specifies the source file format.
+</p>
+
+<p>
+    These commands provide a quick reference for common keytool operations: listing keystore contents, 
+    checking certificate details, and importing both public certificates and private keys. 
+    Adjust filenames, aliases, and keystore passwords to suit your requirements.
+</p>

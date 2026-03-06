@@ -1,0 +1,21 @@
+﻿{
+  "routes": [
+    {
+      "route": "/*",
+      "headers": {
+        "Cache-Control": "public, max-age=30"
+      }
+    }
+  ],
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": [
+      "/images/*.{png,jpg,gif,webp,svg}", 
+      "/assets/*", 
+      "/css/*", 
+      "/gifs/*", 
+      "/lib/*", 
+      "/sample-data/*"
+    ]
+  }
+}

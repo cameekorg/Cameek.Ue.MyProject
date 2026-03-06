@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Cameek.Primitivo" Version="0.0.9" />
+    <PackageReference Include="Cameek.W3CssJs.Bootstrap" Version="5.3.5" />
+    <PackageReference Include="Cameek.W3CssJs.Gsap" Version="3.13.3" />
+    <PackageReference Include="Cameek.W3CssJs.Mermaid" Version="11.6.4" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.0" PrivateAssets="all" />
     <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.14.0" />
