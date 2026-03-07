@@ -1,6 +1,6 @@
 {
-  "name": "Cameek SignalR",
-  "short_name": "SignalR",
+  "name": "Cameek App",
+  "short_name": "App",
   "id": "./",
   "start_url": "./",
   "display": "standalone",
