@@ -1,3 +1,10 @@
 {
-  "my.ports.server": 5250
+  "my.ports.server": 5250,
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#efc035",
+    "titleBar.border": "#efc035",
+    "titleBar.activeForeground": "#080602",
+    "titleBar.inactiveBackground": "#f1c953",
+    "titleBar.inactiveForeground": "#2d2b28"
+  }
 }
