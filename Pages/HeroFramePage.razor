@@ -8,17 +8,18 @@
                KeepLandscape="true" ImageRenderingMode="UeImageRenderingMode.Pixelated"
                ViewportBackground="#001018" Style="background:#001a26;">
 
-        <UeSpriteSheet Src="/img/slug/slug-walk.png" X="290" Y="100" Frame="@Frame"FrameWidth="56" FrameHeight="56" Columns="4" FrameCount="4" Alt="Hero sprite controlled by buttons" />
+        <UeSpriteSheet Src="/img/slug/slug-rotate.png" X="290" Y="100" Frame="@Frame"FrameWidth="56" FrameHeight="56" Columns="8" FrameCount="8" Alt="Hero sprite controlled by buttons" />
 
         <UeGroup X="275" Y="150" style="color:white;">
-             Current frame:
-            <FluentBadge Appearance="Appearance.Accent">@Frame</FluentBadge>
+             Current frame: @Frame
         </UeGroup>
 
         <UeGroup X="275" Y="200">
-            <FluentButton @onclick="DecreaseFrame">Back</FluentButton>
-            <FluentButton @onclick="IncreaseFrame">Next</FluentButton>
+            <FluentButton @onclick="DecreaseFrame">Left</FluentButton>
+            <FluentButton @onclick="IncreaseFrame">Right</FluentButton>
         </UeGroup>
+
+        <UeKeyInput OnKeyDown="OnKeyDown" />
 
     </UeDisplay>
 
@@ -30,26 +31,25 @@
 
     void IncreaseFrame()
     {
-        Frame = SwitchFrame(Frame + 1);
+        Frame = CalculateFrame(Frame + 1);
     }
 
     void DecreaseFrame()
     {
-        Frame = SwitchFrame(Frame - 1);
+        Frame = CalculateFrame(Frame - 1);
     }
 
-    int SwitchFrame(int frame)
+    int CalculateFrame(int newFrame)
     {
-        if (frame > 4)
-        {
-            return 1;
-        }
+        if (newFrame > 8) return 1;
+        if (newFrame < 1) return 8;
 
-        if (frame < 1)
-        {
-            return 4;
-        }
-
-        return frame;
+        return newFrame;
+    }
+    void OnKeyDown(UeKeyInputEventArgs args)
+    {
+        if (args.Key == "ArrowLeft") DecreaseFrame();
+        
+        if (args.Key == "ArrowRight") IncreaseFrame();
     }
 }
