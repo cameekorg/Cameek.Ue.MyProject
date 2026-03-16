@@ -3,53 +3,42 @@
 
 <PageTitle>Hero Frame</PageTitle>
 
-<div class="hero-frame-page">
-    <UeDisplay Class="my-screen"
-               Width="480"
-               Height="270"
-               KeepLandscape="true"
-               ImageRenderingMode="UeImageRenderingMode.Pixelated"
-               ViewportBackground="#001018"
-               Style="background:#001a26;">
+<div class="my-game">
+    <UeDisplay Class="my-screen" Width="640" Height="360"
+               KeepLandscape="true" ImageRenderingMode="UeImageRenderingMode.Pixelated"
+               ViewportBackground="#001018" Style="background:#001a26;">
 
-        <UeSpriteSheet Src="/img/slug/slug-walk.png"
-                       X="212"
-                       Y="107"
-                       Frame="@Frame"
-                       FrameWidth="56"
-                       FrameHeight="56"
-                       Columns="4"
-                       FrameCount="4"
-                       Alt="Hero sprite controlled by buttons" />
+        <UeSpriteSheet Src="/img/slug/slug-walk.png" X="290" Y="100" Frame="@Frame"FrameWidth="56" FrameHeight="56" Columns="4" FrameCount="4" Alt="Hero sprite controlled by buttons" />
+
+        <UeGroup X="275" Y="150" style="color:white;">
+             Current frame:
+            <FluentBadge Appearance="Appearance.Accent">@Frame</FluentBadge>
+        </UeGroup>
+
+        <UeGroup X="275" Y="200">
+            <FluentButton @onclick="DecreaseFrame">Back</FluentButton>
+            <FluentButton @onclick="IncreaseFrame">Next</FluentButton>
+        </UeGroup>
 
     </UeDisplay>
 
-    <div class="hero-frame-controls">
-        <FluentButton Appearance="Appearance.Neutral" @onclick="DecreaseFrame">Back</FluentButton>
-        <FluentButton Appearance="Appearance.Accent" @onclick="IncreaseFrame">Next</FluentButton>
-    </div>
-
-    <p class="hero-frame-status">
-        Current frame:
-        <FluentBadge Appearance="Appearance.Accent">@Frame</FluentBadge>
-    </p>
 </div>
 
 @code {
-    // A simple number field that tells the sprite sheet which frame to show.
-    private int Frame = 1;
 
-    private void IncreaseFrame()
+    int Frame = 1;
+
+    void IncreaseFrame()
     {
-        Frame = RotateFrame(Frame + 1);
+        Frame = SwitchFrame(Frame + 1);
     }
 
-    private void DecreaseFrame()
+    void DecreaseFrame()
     {
-        Frame = RotateFrame(Frame - 1);
+        Frame = SwitchFrame(Frame - 1);
     }
 
-    private static int RotateFrame(int frame)
+    int SwitchFrame(int frame)
     {
         if (frame > 4)
         {
